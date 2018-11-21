@@ -1,12 +1,13 @@
 {
-  "name": "nodeexamples1",
+  "name": "nodehttp_example",
   "version": "1.0.0",
-  "description": "",
+  "description": "node http examples",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index"
   },
-  "author": "",
+  "author": "me",
   "license": "ISC"
+  
 }
