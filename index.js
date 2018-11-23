@@ -1,70 +1,40 @@
-//console.log("hello world");
+const express = require('express');
 const http = require('http');
-const fs = require('fs');
-const path = require('path');
+const morgan = require('morgan');
+const bodyParser = require('body-parser');
 
-const hostname = 'localhost';
+
+const dishRouter = require('./routers1/dishRouter');
+const leaderRouter = require('./routers1/leaderRouter');
+const promotionRouter = require('./routers1/promotionRouter');
+
 const port = 3000;
+const hostname = 'localhost';
 
-const server = http.createServer((req,res) => {
 
+//console.log("hello World");
+
+const app = express();
+app.use(morgan('dev'));
+app.use(bodyParser.json());
+
+app.use('/dishes', dishRouter);
+app.use('/leader', leaderRouter);
+app.use('/promotion', promotionRouter);
+
+
+app.use(express.static(__dirname +'/public'));
+
+
+app.use(( req, res, next) => {
     //console.log(req.headers);
+    res.statusCode = 200;
+    res.setHeader('Content-Type','text/html');
+    res.end('<html><body><h1>This is an Express server</h1></body></html>');
+});
 
+const server = http.createServer(app);
 
-    console.log("Request for" +req.url+" by methode " +req.method);
-
-    // res.statusCode = 200;
-    // res.setHeader('Content-Type', 'text/html');
-    // res.end('<html><body> <h1> Hello, World</h1></body></html>')
-
-
-
-    if(req.method == 'GET')
-    {
-        var fileUrl;
-
-        if(req.url == '/') fileUrl ='/index.html';
-        else fileUrl = req.url; 
-
-        var filePath = path.resolve('./public'+fileUrl);
-
-        const fileExt = path.extname(filePath);
-
-        if(fileExt == '.html')
-        {
-            fs.exists(filePath, (exists) => {
-
-                if(!exists)
-                {
-                    res.statusCode = 404;
-                    res.setHeader('Content-Type','text/html');
-                    res.end("<html><body><h1> the file "+fileUrl+" not found, statuscode 404</h1></body></html>");
-                    return;
-                }
-                res.statusCode = 200;
-                res.setHeader('Content-Type','text/html');
-                fs.createReadStream(filePath).pipe(res);
-            })
-        }
-        else{
-            res.statusCode = 404;
-            res.setHeader('Content-Type','text/html');
-            res.end("<html><body><h1> the file url is not html file, statuscode 404</h1></body></html>");
-            return;
-
-        }
-
-    }
-    else
-    {
-        res.statusCode = 404;
-        res.setHeader('Content-Type','text/html');
-        res.end("<html><body><h1> the method is not get, statuscode 404</h1></body></html>");
-        return;
-    }
-
-})
-
-server.listen(process.env.PORT || port,() => {
-    console.log(`Server running at : ${hostname}:${port}`);
-})
+server.listen( port, hostname, () => { 
+    console.log(`Server running at http://${hostname}:${port}`);
+});

@@ -1,13 +1,17 @@
 {
-  "name": "nodehttp_example",
+  "name": "nodeexpressroute",
   "version": "1.0.0",
-  "description": "node http examples",
+  "description": "node express route",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index"
   },
   "author": "me",
-  "license": "ISC"
-  
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "morgan": "^1.9.1"
+  }
 }
